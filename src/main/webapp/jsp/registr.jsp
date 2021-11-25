@@ -1,7 +1,4 @@
 <html>
-<head>
-    <title>Title</title>
-</head>
 <body>
 <form action="#" method="post">
     <p>Please enter your name</p>

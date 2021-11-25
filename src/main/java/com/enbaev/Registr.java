@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class Registr extends HttpServlet {
+   public static String name;
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("/jsp/registr.jsp");
@@ -15,24 +16,28 @@ public class Registr extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String name = req.getParameter("FIRST_NAME");
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        name = req.getParameter("FIRST_NAME");
         String lastName = req.getParameter("LAST_NAME");
         String women = req.getParameter("WOMEN");
         String men = req.getParameter("MEN");
         String password = req.getParameter("USER_PASSWORD");
         String userAgree = req.getParameter("agree");
         if (!CheckForRegistration.checkNullForRegistration(name, lastName, women, men, password)) {
-            resp.getWriter().println("Lines cannot be empty!");
+            RequestDispatcher requestDispatcher = req.getRequestDispatcher("/jsp/emptyLine.jsp");
+            requestDispatcher.forward(req, resp);
         } else if (!CheckForRegistration.checkCorrectPassword(password)) {
-            resp.getWriter().println("Password cannot be less than 6 characters");
+            RequestDispatcher requestDispatcher = req.getRequestDispatcher("/jsp/errorPassword.jsp");
+            requestDispatcher.forward(req, resp);
         } else if (CheckForRegistration.checkAgree(userAgree)) {
-            resp.getWriter().println("You have not confirmed the processing of data");
+            RequestDispatcher requestDispatcher = req.getRequestDispatcher("/jsp/notAgree.jsp");
+            requestDispatcher.forward(req, resp);
         } else if (!CheckForRegistration.checkNameLastNameContainsNumber(name, lastName)) {
-            resp.getWriter().println("First and last name cannot contain numbers");
+            RequestDispatcher requestDispatcher = req.getRequestDispatcher("/jsp/errorName.jsp");
+            requestDispatcher.forward(req, resp);
         } else {
-            resp.getWriter().println(
-                    "Congratulations " + name + " on successful registration");
+            RequestDispatcher requestDispatcher = req.getRequestDispatcher("/jsp/success.jsp");
+            requestDispatcher.forward(req, resp);
         }
     }
 }
